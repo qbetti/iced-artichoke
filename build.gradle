@@ -16,6 +16,6 @@ repositories {
 
 dependencies {
     compile name: 'icepdf-viewer'
-    compile name: 'icepdf-pro'
+    compile name: 'icepdf-core'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
