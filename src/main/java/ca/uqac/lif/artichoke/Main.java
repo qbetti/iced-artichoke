@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         ArtichokeSwingController controller = new ArtichokeSwingController();
-        SwingViewBuilder factory = new SwingViewBuilder(controller);
+        SwingViewBuilder factory = new ArtichokeViewBuilder(controller);
         JFrame window = factory.buildViewerFrame();
 
         controller.getDocumentViewController().setAnnotationCallback(
@@ -18,11 +18,6 @@ public class Main {
 
         window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         window.addWindowListener(controller);
-
-
-        JButton commitChangesButton = new JButton("Commit changes");
-        window.getJMenuBar().add(commitChangesButton);
-        controller.setCommitChangesButton(commitChangesButton);
 
         window.pack();
         window.setVisible(true);
