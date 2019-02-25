@@ -61,11 +61,10 @@ public class ArtichokeSwingController extends SwingController {
         if(oldFormData == null)
             return;
 
-        FormData newFormData = FormData.buildFromDocument(document);
-        ConfirmChangesToCommitDialog dialog = new ConfirmChangesToCommitDialog(this.getViewerFrame());
-        CommitChangesModel model = new CommitChangesModel(dialog, oldFormData, document);
-
-        dialog.setCommitChangesModel(model);
+        CommitChangesController commitChangesController = new CommitChangesController();
+        ConfirmChangesToCommitDialog dialog = new ConfirmChangesToCommitDialog(this.getViewerFrame(), commitChangesController);
+        CommitChangesModel commitChangesModel = new CommitChangesModel(dialog, oldFormData, document);
+        commitChangesController.setModel(commitChangesModel);
 
         dialog.pack();
         dialog.setVisible(true);
@@ -78,6 +77,6 @@ public class ArtichokeSwingController extends SwingController {
 
 
         // Must be done after all changes
-        oldFormData = newFormData;
+//        oldFormData = newFormData;
     }
 }
