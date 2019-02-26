@@ -1,9 +1,11 @@
 package ca.uqac.lif.artichoke;
 
+import org.icepdf.core.pobjects.Document;
 import org.icepdf.ri.common.SwingController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.text.Normalizer;
 
 public class ArtichokeSwingController extends SwingController {
 
@@ -59,23 +61,15 @@ public class ArtichokeSwingController extends SwingController {
         if(oldFormData == null)
             return;
 
-        FormData newFormData = FormData.buildFromDocument(document);
-        CommitChangesDialog dialog = new CommitChangesDialog(this.getViewerFrame());
-        CommitChangesModel model = new CommitChangesModel(dialog, oldFormData, document);
-
-        dialog.setCommitChangesModel(model);
+        CommitChangesController commitChangesController = new CommitChangesController();
+        CommitChangesDialog dialog = new CommitChangesDialog(this.getViewerFrame(), commitChangesController);
+        CommitChangesModel commitChangesModel = new CommitChangesModel(dialog, oldFormData, document);
+        commitChangesController.setModel(commitChangesModel);
 
         dialog.pack();
         dialog.setVisible(true);
 
-
-
-
-
-
-
-
         // Must be done after all changes
-        oldFormData = newFormData;
+//        oldFormData = newFormData;
     }
 }
