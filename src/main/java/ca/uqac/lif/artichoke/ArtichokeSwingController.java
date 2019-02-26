@@ -1,11 +1,9 @@
 package ca.uqac.lif.artichoke;
 
-import org.icepdf.core.pobjects.Document;
 import org.icepdf.ri.common.SwingController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.text.Normalizer;
 
 public class ArtichokeSwingController extends SwingController {
 
@@ -62,7 +60,7 @@ public class ArtichokeSwingController extends SwingController {
             return;
 
         FormData newFormData = FormData.buildFromDocument(document);
-        ConfirmChangesToCommitDialog dialog = new ConfirmChangesToCommitDialog(this.getViewerFrame());
+        CommitChangesDialog dialog = new CommitChangesDialog(this.getViewerFrame());
         CommitChangesModel model = new CommitChangesModel(dialog, oldFormData, document);
 
         dialog.setCommitChangesModel(model);

@@ -4,13 +4,13 @@ import org.icepdf.core.pobjects.Document;
 
 public class CommitChangesModel {
 
-    private ConfirmChangesToCommitDialog view;
+    private CommitChangesDialog view;
 
     private FormData oldFormData;
     private FormData newFormData;
 
 
-    public CommitChangesModel (ConfirmChangesToCommitDialog view, FormData oldFormData, Document document) {
+    public CommitChangesModel (CommitChangesDialog view, FormData oldFormData, Document document) {
         this.view = view;
         view.setCommitChangesModel(this);
 

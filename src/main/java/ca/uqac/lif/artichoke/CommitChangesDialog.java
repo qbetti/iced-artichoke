@@ -1,7 +1,6 @@
 package ca.uqac.lif.artichoke;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,19 +8,20 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ConfirmChangesToCommitDialog extends JDialog implements ActionListener {
+public class CommitChangesDialog extends JDialog implements ActionListener {
 
 
     private final static String[] groups = new String[]{"group0", "group1", "group2"};
     private final static Object[] columnNames = new Object[]{"Key", "Old value", "New value", "Group"};
+    private final static int GROUP_COLUMN_INDEX = 3;
 
-    private static final Logger LOGGER = Logger.getLogger(ConfirmChangesToCommitDialog.class.getCanonicalName());
+    private static final Logger LOGGER = Logger.getLogger(CommitChangesDialog.class.getCanonicalName());
     private CommitChangesModel model;
     private JPanel dialogPanel;
     private JTable changesTable;
 
 
-    public ConfirmChangesToCommitDialog(Frame frame) {
+    public CommitChangesDialog(Frame frame) {
         super(frame, "Confirm changes to commit", true);
         this.setContentPane(buildDialogPanel());
     }
@@ -33,16 +33,17 @@ public class ConfirmChangesToCommitDialog extends JDialog implements ActionListe
 
         // ComboxBox containg potential groups
         JComboBox<String> comboBox = new JComboBox<>(groups);
+        comboBox.addActionListener(this);
 
         // tables containing new changes
         changesTable = new JTable(new DefaultTableModel(columnNames, 0)) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 3;
+                return column == GROUP_COLUMN_INDEX;
             }
         };
 
-        changesTable.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
+        changesTable.getColumnModel().getColumn(GROUP_COLUMN_INDEX).setCellEditor(new DefaultCellEditor(comboBox));
 
         // Making table scrollable
         JScrollPane scrollPane = new JScrollPane(changesTable);
@@ -59,8 +60,6 @@ public class ConfirmChangesToCommitDialog extends JDialog implements ActionListe
         dialogPanel.add(scrollPane);
         dialogPanel.add(btnPanel);
 
-
-
         return dialogPanel;
     }
 
@@ -68,14 +67,14 @@ public class ConfirmChangesToCommitDialog extends JDialog implements ActionListe
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-
     }
 
     public void changesRetrieved(List<FormData.Change> changes) {
         for(FormData.Change change : changes) {
             LOGGER.info(change.toString());
 
-            ((DefaultTableModel) changesTable.getModel()).addRow(new Object[]{
+            DefaultTableModel tableModel = (DefaultTableModel) changesTable.getModel();
+            tableModel.addRow(new Object[]{
                     change.getKey(),
                     change.getOldValue(),
                     change.getNewValue()
