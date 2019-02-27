@@ -1,5 +1,7 @@
 package ca.uqac.lif.artichoke;
 
+import jdk.nashorn.internal.scripts.JO;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -86,7 +88,7 @@ public class CommitChangesDialog extends JDialog {
 
     public void changesRetrieved(List<FormData.Change> changes) {
         if(changes == null || changes.size() == 0) {
-            onNoModificationDialog();
+            onNoChangesDetected();
             return;
         }
 
@@ -102,12 +104,36 @@ public class CommitChangesDialog extends JDialog {
         }
     }
 
-    public void onNoModificationDialog() {
-        JOptionPane.showMessageDialog(this, "There is no modification to commit");
+    public void onNoChangesDetected() {
+        JOptionPane.showMessageDialog(
+                this,
+                "There is no modification to commit",
+                "No modification",
+                JOptionPane.WARNING_MESSAGE
+        );
         changesTable.setEnabled(false);
         commitBtn.setEnabled(false);
         close();
     }
+
+    public void onFieldKeyNotProvided(int rowIndex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Element at row " + rowIndex + " does not have a key",
+                "Field key not found",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    public void onGroupNotProvided(String key) {
+        JOptionPane.showMessageDialog(
+                this,
+                "No group specified for field \"" + key + "\"",
+                "Missing group",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
 
     public void close() {
         this.dispose();
