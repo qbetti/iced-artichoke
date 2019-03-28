@@ -1,17 +1,23 @@
 package ca.uqac.lif.artichoke;
 
-import org.icepdf.core.pobjects.Document;
+import ca.uqac.lif.artichoke.keyring.KeyRing;
 import org.icepdf.ri.common.SwingController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.text.Normalizer;
 
 public class ArtichokeSwingController extends SwingController {
 
     private JButton commitChangesButton;
 
     private FormData oldFormData;
+
+    private KeyRing keyRing;
+
+    public ArtichokeSwingController() {
+        super();
+        keyRing = null;
+    }
 
 
     @Override
@@ -58,6 +64,11 @@ public class ArtichokeSwingController extends SwingController {
     }
 
     public void commitChanges() {
+        if(keyRing == null) {
+            browseForKeyRing();
+        }
+
+
         if(oldFormData == null)
             return;
 
@@ -71,5 +82,29 @@ public class ArtichokeSwingController extends SwingController {
 
         // Must be done after all changes
 //        oldFormData = newFormData;
+    }
+
+    private void openKeyringFile() {
+
+    }
+
+    private void browseForKeyRing() {
+        KeyringChooser kc = new KeyringChooser();
+
+        KeyRing keyRing = kc.showDialog(getViewerFrame());
+
+
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setDialogTitle("You must choose a keyring file before committing changes");
+//        int result = fileChooser.showDialog(getViewerFrame(), "Open keyring");
+//
+//
+//        if(result == JFileChooser.APPROVE_OPTION) {
+//            File file = fileChooser.getSelectedFile();
+//            logger.info("Keyring file: " + file.getAbsolutePath());
+//
+//        } else {
+//            logger.info("Keyring selection was cancelled");
+//        }
     }
 }
