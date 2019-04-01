@@ -1,13 +1,16 @@
 package ca.uqac.lif.artichoke;
 
-import org.icepdf.ri.common.SwingController;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.icepdf.ri.common.SwingViewBuilder;
 
 import javax.swing.*;
+import java.security.Security;
 
 public class Main {
 
     public static void main(String[] args) {
+        Security.addProvider(new BouncyCastleProvider());
+
         ArtichokeSwingController controller = new ArtichokeSwingController();
         SwingViewBuilder factory = new ArtichokeViewBuilder(controller);
         JFrame window = factory.buildViewerFrame();

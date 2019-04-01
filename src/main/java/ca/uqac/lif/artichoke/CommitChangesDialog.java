@@ -5,6 +5,9 @@ import jdk.nashorn.internal.scripts.JO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,29 +31,31 @@ public class CommitChangesDialog extends JDialog {
     private JLabel chooseGroupsLbl;
 
 
-    public CommitChangesDialog(Frame frame, CommitChangesController controller) {
+    public CommitChangesDialog(Frame frame, CommitChangesController controller, List<String> groupNames) {
         super(frame, "Confirm changes to commit", true);
         this.controller = controller;
         controller.setView(this);
 
         addWindowListener(controller);
 
-        buildDialogPanel();
+        buildDialogPanel(groupNames);
     }
 
 
-    protected void buildDialogPanel() {
+    protected void buildDialogPanel(List<String> groupNames) {
         dialogPanel = new JPanel();
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
 
         chooseGroupsLbl = new JLabel(
-                "Choose the group you wish to perform the changement on behalf of:",
+                "Choose the groups you wish to perform the changes on behalf of:",
                 SwingConstants.LEFT
         );
         dialogPanel.add(chooseGroupsLbl);
 
 
-        // ComboxBox containg potential groups
+        // ComboxBox containing potential groups
+        String[] groups = new String[groupNames.size()];
+        groupNames.toArray(groups);
         groupComboBox = new JComboBox<>(groups);
 
         // tables containing new changes, non-editable except for last column

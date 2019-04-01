@@ -20,7 +20,9 @@ repositories {
     }
 }
 
-
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 dependencies {
     compile name: 'icepdf-viewer'

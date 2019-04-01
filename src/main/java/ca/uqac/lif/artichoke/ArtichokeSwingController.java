@@ -64,47 +64,37 @@ public class ArtichokeSwingController extends SwingController {
     }
 
     public void commitChanges() {
-        if(keyRing == null) {
-            browseForKeyRing();
+        if(oldFormData == null) {
+            JOptionPane.showMessageDialog(getViewerFrame(), "No form was found in this document", "No form", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
-
-        if(oldFormData == null)
-            return;
+        // retrieving keyring
+        if(keyRing == null) {
+            keyRing = browseForKeyRing();
+            if(keyRing == null) {
+                JOptionPane.showMessageDialog(getViewerFrame(), "Cannot commit changes without specifying a keyring file first", "No keyring file", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
 
         CommitChangesController commitChangesController = new CommitChangesController();
-        CommitChangesDialog dialog = new CommitChangesDialog(this.getViewerFrame(), commitChangesController);
+        CommitChangesDialog dialog = new CommitChangesDialog(this.getViewerFrame(), commitChangesController, keyRing.getGroupIds());
         CommitChangesModel commitChangesModel = new CommitChangesModel(dialog, oldFormData, document);
         commitChangesController.setModel(commitChangesModel);
 
         dialog.pack();
         dialog.setVisible(true);
-
-        // Must be done after all changes
-//        oldFormData = newFormData;
     }
 
-    private void openKeyringFile() {
-
-    }
-
-    private void browseForKeyRing() {
+    private KeyRing browseForKeyRing() {
         KeyringChooser kc = new KeyringChooser();
+        int result = kc.showDialog(getViewerFrame());
 
-        KeyRing keyRing = kc.showDialog(getViewerFrame());
-
-
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setDialogTitle("You must choose a keyring file before committing changes");
-//        int result = fileChooser.showDialog(getViewerFrame(), "Open keyring");
-//
-//
-//        if(result == JFileChooser.APPROVE_OPTION) {
-//            File file = fileChooser.getSelectedFile();
-//            logger.info("Keyring file: " + file.getAbsolutePath());
-//
-//        } else {
-//            logger.info("Keyring selection was cancelled");
-//        }
+        if (result == KeyringChooser.SUCCEED_OPTION) {
+            logger.info(kc.getChosenKeyRing().toJson().toString());
+            return kc.getChosenKeyRing();
+        }
+        return null;
     }
 }
